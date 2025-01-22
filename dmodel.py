@@ -19,10 +19,15 @@ class ConvModel(nn.Module):
         )
 
         self.fc_layers = nn.ModuleDict({
-            "layer1": nn.Linear(in_features=64, out_features=128),
-            "layer2": nn.Linear(in_features=128, out_features=64),
-            "layer3": nn.Linear(in_features=64, out_features=32),
-            "layer4": nn.Linear(in_features=32, out_features=10),
+            "fc1-1": nn.Linear(in_features=64, out_features=128),
+            "fc1-2": nn.Linear(in_features=128, out_features=64),
+            "fc1-3": nn.Linear(in_features=64, out_features=32),
+            "fc1-4": nn.Linear(in_features=32, out_features=16),
+            "fc2-1": nn.Linear(in_features=512, out_features=256),
+            "fc2-2": nn.Linear(in_features=256, out_features=128),
+            "fc2-3": nn.Linear(in_features=128, out_features=64),
+            "fc2-4": nn.Linear(in_features=64, out_features=32),
+            "fc2-5": nn.Linear(in_features=32, out_features=10),
         })
 
         self.bn_layers = nn.ModuleDict({
