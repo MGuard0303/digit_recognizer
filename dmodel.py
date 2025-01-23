@@ -46,6 +46,8 @@ class ConvModel(nn.Module):
             weight_decay=adam_weight_decay,
         )
 
+        self.loss_function = nn.NLLLoss()
+
     def forward(self, img: torch.Tensor) -> torch.Tensor:
         # Convolution Unit
         img = self.conv_unit(img)
