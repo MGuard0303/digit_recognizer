@@ -2,27 +2,36 @@ import pandas as pd
 import torch
 
 
-def csv_to_tensor(dataframe: pd.DataFrame, is_train: bool = True) -> torch.Tensor:
+# Convert CSV data to Tensor.
+# The shape of output data tensor is (N, H, W).
+def csv_to_tensor(dataframe: pd.DataFrame, is_train: bool = True) -> list:
     if is_train is True:
-        tensor = torch.tensor(dataframe.iloc[:, 1:].to_numpy(), dtype=torch.float)
-    else:
-        tensor = torch.tensor(dataframe.to_numpy(), dtype=torch.float)
+        data = torch.tensor(dataframe.iloc[:, 1:].to_numpy(), dtype=torch.float)
+        data = data.reshape(data.size(0), 28, 28)
+        label = torch.tensor(dataframe.iloc[:, 1].to_numpy(), dtype=torch.float)
 
-    return tensor
+        return [data, label]
+    else:
+        data = torch.tensor(dataframe.to_numpy(), dtype=torch.float)
+        data = data.reshape(data.size(0), 28, 28)
+
+        return [data]
 
 
 # Use min-max normalization to shrink pixel value to [0, 1].
+# The size of inputs and outputs tensors are both (N, H, W).
 # Note: Be sure dtype of inputs should be float.
-def normalize(inputs: torch.Tensor, is_global: bool = False) -> torch.Tensor:
-    if is_global is True:
+def normalize(inputs: torch.Tensor, norm: str = None) -> torch.Tensor:
+    if norm == "global":
         glo_max = torch.max(inputs).item()
         glo_min = torch.min(inputs).item()
-        inputs.apply_(lambda x: (x - glo_min) / (glo_max - glo_min))
-    else:
-        loc_max, _ = torch.max(inputs, dim=1)
-        loc_min, _ = torch.min(inputs, dim=1)
+        inputs = (inputs - glo_min) / (glo_max - glo_min)
 
-        for batch_data, batch_max, batch_min in zip(inputs, loc_max, loc_min):
-            batch_data.apply_(lambda x: (x - batch_min.item()) / (batch_max.item() - batch_min.item()))
+    elif norm == "per-image":
+        inputs = torch.flatten(inputs, start_dim=1)
+        img_max = torch.max(inputs, dim=1)[0].unsqueeze(1)
+        img_min = torch.min(inputs, dim=1)[0].unsqueeze(1)
+        inputs = (inputs - img_min) / (img_max - img_min)
+        inputs = inputs.reshape(inputs.size(0), 28, 28)
 
     return inputs
