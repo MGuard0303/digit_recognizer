@@ -3,23 +3,25 @@ import torch
 
 
 # Convert CSV data to Tensor.
-# The shape of output data tensor is (N, H, W).
+# The shape of output data tensor is (N, C, H, W).
 def csv_to_tensor(dataframe: pd.DataFrame, is_training: bool = True) -> list:
     if is_training is True:
         data = torch.tensor(dataframe.iloc[:, 1:].to_numpy(), dtype=torch.float)
         data = data.reshape(data.size(0), 28, 28)
-        label = torch.tensor(dataframe.iloc[:, 1].to_numpy(), dtype=torch.float)
+        data = torch.unsqueeze(data, dim=1)
+        label = torch.tensor(dataframe.iloc[:, 0].to_numpy(), dtype=torch.long)
 
         return [data, label]
     else:
         data = torch.tensor(dataframe.to_numpy(), dtype=torch.float)
         data = data.reshape(data.size(0), 28, 28)
+        data = torch.unsqueeze(data, dim=1)
 
         return [data]
 
 
 # Use min-max normalization to shrink pixel value to [0, 1].
-# The size of inputs and outputs tensors are both (N, H, W).
+# The size of inputs and outputs tensors are both (N, C, H, W).
 # Note: Be sure dtype of inputs should be float.
 def normalize(inputs: torch.Tensor, normalization: str = None) -> torch.Tensor:
     if normalization == "global":
@@ -33,5 +35,6 @@ def normalize(inputs: torch.Tensor, normalization: str = None) -> torch.Tensor:
         img_min = torch.min(inputs, dim=1)[0].unsqueeze(1)
         inputs = (inputs - img_min) / (img_max - img_min)
         inputs = inputs.reshape(inputs.size(0), 28, 28)
+        inputs = torch.unsqueeze(inputs, dim=1)
 
     return inputs
