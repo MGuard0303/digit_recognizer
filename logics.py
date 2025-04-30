@@ -49,6 +49,7 @@ def train(model: torch.nn.Module, loader_train: DataLoader, loader_valid: DataLo
 
         # Training step.
         for _, (img, lbl) in enumerate(loader_train):
+            # noinspection PyTypeChecker
             batch_loss_trn, _ = train_process(model=model, image=img, label=lbl)
             epoch_loss_trn += batch_loss_trn
 
@@ -63,6 +64,7 @@ def train(model: torch.nn.Module, loader_train: DataLoader, loader_valid: DataLo
         epoch_loss_vld = 0.0
 
         for _, (img, lbl) in enumerate(loader_valid):
+            # noinspection PyTypeChecker
             batch_loss_vld, _ = valid_process(model=model, image=img, label=lbl)
             epoch_loss_vld += batch_loss_vld
 
@@ -84,6 +86,7 @@ def predict(model: torch.nn.Module, pred_loader: DataLoader, is_return: bool = F
     preds = []
 
     for _, img in enumerate(pred_loader):
+        # noinspection PyTypeChecker
         batch_pred = pred_process(model=model, image=img)
         batch_pred = torch.exp(batch_pred)
         batch_pred = torch.max(batch_pred, dim=1)[1]
