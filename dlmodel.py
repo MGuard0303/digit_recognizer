@@ -27,4 +27,3 @@ class LeNet(nn.Module):
         image = self.backbone(image)
 
         return image
-        
