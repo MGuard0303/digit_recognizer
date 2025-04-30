@@ -44,7 +44,7 @@ def train(model: torch.nn.Module, loader_train: DataLoader, loader_valid: DataLo
     steps_vld = len(loader_valid)
 
     for epoch in range(1, epochs + 1):
-        print(f"Epoch {epoch:02}")
+        print(f"Training: Epoch {epoch:02}")
         epoch_loss_trn = 0.0
 
         # Training step.
@@ -56,6 +56,7 @@ def train(model: torch.nn.Module, loader_train: DataLoader, loader_valid: DataLo
         model.epoch_loss_trn.append(avg_epoch_loss_trn)
 
         print(f"| Average Training Loss: {avg_epoch_loss_trn:.3f} |")
+        print()
 
         # Validation.
         print(f"Validating at Epoch {epoch:02}")
@@ -69,6 +70,7 @@ def train(model: torch.nn.Module, loader_train: DataLoader, loader_valid: DataLo
         model.epoch_loss_vld.append(avg_epoch_loss_vld)
 
         print(f"| Average Validation Loss: {avg_epoch_loss_vld:.3f} |")
+        print()
 
     print(" Training complete.")
 
