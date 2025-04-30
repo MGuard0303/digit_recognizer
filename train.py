@@ -36,5 +36,5 @@ model.optimizer = torch.optim.Adam(model.parameters())
 model.to(device)
 
 # Training setup
-epoch = 10
-model_final = logics.train(model=model, loader_train=dl_train, loader_valid=dl_valid, epochs=epoch, is_return=True)
+epochs = 10
+model_final = logics.train(model=model, loader_train=dl_train, loader_valid=dl_valid, epochs=epochs, is_return=True)
