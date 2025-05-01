@@ -1,3 +1,4 @@
+import datetime
 import pandas as pd
 import torch
 from torch.utils.data import TensorDataset, DataLoader
@@ -14,6 +15,7 @@ df = pd.read_csv("./dataset/train.csv")
 data, label = utils.csv_to_tensor(df)
 data = utils.normalize(data, normalization="per-image")
 
+# Separate training set and validation set.
 random_index = torch.randperm(data.size(0))
 num_valid = int(data.size(0) * 0.3)
 index_valid = random_index[:num_valid]
@@ -24,7 +26,7 @@ data_valid = data[index_valid].to(device)
 label_train = label[index_train].to(device)
 label_valid = label[index_valid].to(device)
 
-# Wrap data to Dataset and DataLoader
+# Wrap data to Dataset and DataLoader.
 ds_train = TensorDataset(data_train, label_train)
 ds_valid = TensorDataset(data_valid, label_valid)
 
@@ -36,5 +38,10 @@ model.optimizer = torch.optim.Adam(model.parameters())
 model.to(device)
 
 # Training setup
-epochs = 10
+epochs = 30
 model_final = logics.train(model=model, loader_train=dl_train, loader_valid=dl_valid, epochs=epochs, is_return=True)
+
+# Save model parameters
+date = datetime.datetime.now().strftime("%Y%m%d")
+timestamp = datetime.datetime.now().strftime("%H%M%S")
+utils.save_param(model=model_final, directory=f"./expt/{date}", filename=f"{timestamp}.pt")

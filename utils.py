@@ -1,10 +1,12 @@
+from pathlib import Path
+
 import pandas as pd
 import torch
 
 
 # Convert CSV data to Tensor.
 # The shape of output data tensor is (N, C, H, W).
-def csv_to_tensor(dataframe: pd.DataFrame, is_training: bool = True) -> list:
+def csv_to_tensor(dataframe: pd.DataFrame, is_training: bool = True) -> list | torch.Tensor:
     if is_training is True:
         data = torch.tensor(dataframe.iloc[:, 1:].to_numpy(), dtype=torch.float)
         data = data.reshape(data.size(0), 28, 28)
@@ -17,7 +19,7 @@ def csv_to_tensor(dataframe: pd.DataFrame, is_training: bool = True) -> list:
         data = data.reshape(data.size(0), 28, 28)
         data = torch.unsqueeze(data, dim=1)
 
-        return [data]
+        return data
 
 
 # Use min-max normalization to shrink pixel value to [0, 1].
@@ -38,3 +40,13 @@ def normalize(inputs: torch.Tensor, normalization: str = None) -> torch.Tensor:
         inputs = torch.unsqueeze(inputs, dim=1)
 
     return inputs
+
+
+def save_param(model: torch.nn.Module, directory: str, filename: str) -> None:
+    directory = Path(directory)
+
+    if not directory.exists():
+        directory.mkdir(parents=True)
+
+    param_path = Path(f"{directory}/{filename}")
+    torch.save(model, param_path)
