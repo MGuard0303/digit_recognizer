@@ -81,11 +81,11 @@ def train(model: torch.nn.Module, loader_train: DataLoader, loader_valid: DataLo
 
 
 @torch.no_grad()
-def predict(model: torch.nn.Module, pred_loader: DataLoader, is_return: bool = False) -> torch.Tensor:
+def predict(model: torch.nn.Module, loader_predict: DataLoader, is_return: bool = False) -> torch.Tensor:
     model.eval()
     preds = []
 
-    for _, img in enumerate(pred_loader):
+    for img, in loader_predict:
         # noinspection PyTypeChecker
         batch_pred = pred_process(model=model, image=img)
         batch_pred = torch.exp(batch_pred)
