@@ -49,4 +49,9 @@ def save_param(model: torch.nn.Module, directory: str, filename: str) -> None:
         directory.mkdir(parents=True)
 
     param_path = Path(f"{directory}/{filename}")
-    torch.save(model, param_path)
+    params = {
+        "param": model.state_dict(),
+        "train_loss": model.epoch_loss_trn,
+        "valid_loss": model.epoch_loss_vld
+    }
+    torch.save(params, param_path)

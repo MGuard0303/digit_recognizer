@@ -2,6 +2,7 @@ import pandas as pd
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 
+import dlmodel
 import logics
 import utils
 
@@ -19,6 +20,10 @@ ds_test = TensorDataset(data_test)
 dl_test = DataLoader(ds_test, batch_size=256, shuffle=False)
 
 # Prediction setup
-model = torch.load("./expt/20250501/113400.pt")
+params = torch.load("expt/20250506/093248.pt", weights_only=True)
+model = dlmodel.LeNet()
+model.load_state_dict(params["param"])
+model.epoch_loss_trn = params["train_loss"]
+model.epoch_loss_vld = params["valid_loss"]
 model.to(device)
 prediction = logics.predict(model=model, loader_predict=dl_test, is_return=True)

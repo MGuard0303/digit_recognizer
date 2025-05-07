@@ -1,9 +1,10 @@
+import matplotlib.pyplot as plt
 import torch
 from torch import nn
 
 
 class LeNet(nn.Module):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.epoch_loss_trn = []
@@ -23,7 +24,12 @@ class LeNet(nn.Module):
 
         self.loss_function = nn.NLLLoss()
 
-    def forward(self, image: torch.Tensor):
+    def forward(self, image: torch.Tensor) -> torch.Tensor:
         image = self.backbone(image)
 
         return image
+
+    def plot_loss(self,) -> None:
+        fig, ax = plt.subplots()
+        ax.plot(self.epoch_loss_trn)
+        ax.plot(self.epoch_loss_vld)
