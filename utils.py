@@ -71,7 +71,7 @@ def save_prediction(prediction: torch.Tensor, directory: str, filename: str) -> 
     prediction = prediction.numpy()
 
     with open(path, "a",) as f:
-        f.write("ImageID, Label\n")
+        f.write("ImageID,Label\n")
 
         for i in range(prediction.size):
-            f.write(f"{i + 1}, {int(prediction[i])}\n")
+            f.write(f"{i + 1},{int(prediction[i])}\n")
