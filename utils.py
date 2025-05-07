@@ -55,3 +55,23 @@ def save_param(model: torch.nn.Module, directory: str, filename: str) -> None:
         "valid_loss": model.epoch_loss_vld
     }
     torch.save(params, param_path)
+
+
+def save_prediction(prediction: torch.Tensor, directory: str, filename: str) -> None:
+    directory = Path(directory)
+
+    if not directory.exists():
+        directory.mkdir(parents=True)
+
+    path = Path(f"{directory}/{filename}")
+
+    if prediction.is_cuda:
+        prediction = prediction.cpu()
+
+    prediction = prediction.numpy()
+
+    with open(path, "a",) as f:
+        f.write("ImageID, Label\n")
+
+        for i in range(prediction.size):
+            f.write(f"{i + 1}, {int(prediction[i])}\n")

@@ -31,5 +31,14 @@ class LeNet(nn.Module):
 
     def plot_loss(self,) -> None:
         fig, ax = plt.subplots()
-        ax.plot(self.epoch_loss_trn)
-        ax.plot(self.epoch_loss_vld)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.set_xlabel("Epoch")
+        ax.set_ylabel("Loss")
+
+        ax.plot(self.epoch_loss_trn, label="train loss")
+        ax.plot(self.epoch_loss_vld, label="valid loss")
+
+        ax.legend()
+
+        plt.show()

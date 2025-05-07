@@ -27,3 +27,5 @@ model.epoch_loss_trn = params["train_loss"]
 model.epoch_loss_vld = params["valid_loss"]
 model.to(device)
 prediction = logics.predict(model=model, loader_predict=dl_test, is_return=True)
+
+utils.save_prediction(prediction=prediction, directory="./prediction/20250507", filename="test.csv")
