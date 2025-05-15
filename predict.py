@@ -20,7 +20,7 @@ ds_test = TensorDataset(data_test)
 dl_test = DataLoader(ds_test, batch_size=256, shuffle=False)
 
 # Prediction setup
-params = torch.load("expt/20250506/093248.pt", weights_only=True)
+params = torch.load("expt/20250515/142853.pt", weights_only=True)
 model = dlmodel.LeNet()
 model.load_state_dict(params["param"])
 model.epoch_loss_trn = params["train_loss"]
@@ -28,4 +28,4 @@ model.epoch_loss_vld = params["valid_loss"]
 model.to(device)
 prediction = logics.predict(model=model, loader_predict=dl_test, is_return=True)
 
-utils.save_prediction(prediction=prediction, directory="./prediction/20250507", filename="test.csv")
+utils.save_prediction(prediction=prediction, directory="./prediction/20250515", filename="test.csv")
